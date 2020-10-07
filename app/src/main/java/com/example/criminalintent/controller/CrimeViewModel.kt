@@ -8,7 +8,7 @@ class CrimeViewModel : ViewModel(){
 
     init {
         (1..100).forEach {
-            if(it % 2 == 0) listOfCrimes += Crime(0,"test$it") else listOfCrimes += Crime(1,"test$it")
+            if(it % 2 == 0) listOfCrimes += Crime(false,"test$it") else listOfCrimes += Crime(true,"test$it")
         }
     }
 }
