@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.R
 import com.example.criminalintent.data.Crime
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<CrimeViewController.GenericHolder>() {
 
@@ -18,7 +21,10 @@ class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<Crime
          val crimeDate: TextView = itemView.findViewById(R.id.crime_date)
      }
 
+
+    //main viewholder
     inner class ViewHolder(itemView: View): GenericHolder(itemView),View.OnClickListener{
+        val imageSolved: ImageView = itemView.findViewById(R.id.crime_solved_image)
         init {
             itemView.setOnClickListener(this)
         }
@@ -47,8 +53,8 @@ class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<Crime
         else ->  ViewHolderSpecial(LayoutInflater.from(parent.context).inflate(R.layout.list_item_crime_special,parent,false))
     }
 
-
-    override fun getItemViewType(position: Int): Int = if(dataSet[position].requiresPolice) 1 else 0
+    //if we need two versions of viewholder
+ //   override fun getItemViewType(position: Int): Int = if(dataSet[position].requiresPolice) 1 else 0
 
 
 
@@ -63,16 +69,18 @@ class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<Crime
 
     private fun bindNormal(holder: ViewHolder, position: Int){
         holder.apply {
+            val dateFormated = SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault()).format(dataSet[position].date)
             crimeTitle.text = dataSet[position].title
-            crimeDate.text = dataSet[position].date.toString()
+            crimeDate.text = dateFormated.toString()
+            if(!dataSet[position].solved) imageSolved.visibility = View.INVISIBLE
         }
     }
 
-    private fun bindSpecial(holder: ViewHolderSpecial, position: Int)
-    {
+    private fun bindSpecial(holder: ViewHolderSpecial, position: Int) {
+
         holder.apply {
             crimeTitle.text = dataSet[position].title
-            crimeDate.text = dataSet[position].date.toString()
+
             crimeButton.setOnClickListener {
                 Toast.makeText(it.context,"Calling police...", Toast.LENGTH_SHORT).show()
             }
