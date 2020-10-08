@@ -2,6 +2,8 @@ package com.example.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.criminalintent.fragments.CrimeFragment
+import com.example.criminalintent.fragments.CriminalListFragment
 import java.util.*
 
 class MainActivity : AppCompatActivity(), CriminalListFragment.CrimeCallback {
@@ -20,7 +22,13 @@ class MainActivity : AppCompatActivity(), CriminalListFragment.CrimeCallback {
     }
 
     override fun crime(uuid: UUID) {
-        val fragmentSupport = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,CrimeFragment()).addToBackStack(null).commit()
+        val bundle: Bundle = Bundle().apply {
+            putString(CRIME_UUID,uuid.toString())
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CrimeFragment.getInstance(uuid.toString())).addToBackStack(null).commit()
+    }
+
+    companion object{
+        const val CRIME_UUID = "crime_uuid"
     }
 }

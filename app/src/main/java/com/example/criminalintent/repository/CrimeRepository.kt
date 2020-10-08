@@ -1,9 +1,8 @@
-package com.example.criminalintent
+package com.example.criminalintent.repository
 
 import android.content.Context
 import androidx.room.Room
 import com.example.criminalintent.data.Crime
-import com.example.criminalintent.database.CrimeDao
 import com.example.criminalintent.database.CrimeDatabase
 import java.lang.IllegalStateException
 import java.util.*

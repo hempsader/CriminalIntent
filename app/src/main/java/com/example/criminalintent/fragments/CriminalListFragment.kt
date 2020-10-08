@@ -1,25 +1,18 @@
-package com.example.criminalintent
+package com.example.criminalintent.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.ListFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.criminalintent.controller.CrimeViewModel
-import com.example.criminalintent.data.Crime
+import com.example.criminalintent.R
+import com.example.criminalintent.viewmodels.CrimeViewModel
 import com.example.criminalintent.view.CrimeViewController
 import java.util.*
-import javax.security.auth.callback.Callback
 
 class CriminalListFragment : Fragment(), CrimeViewController.Callbacks {
     interface CrimeCallback{
