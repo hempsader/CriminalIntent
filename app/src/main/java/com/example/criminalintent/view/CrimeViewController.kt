@@ -1,5 +1,8 @@
 package com.example.criminalintent.view
 
+import android.content.ComponentCallbacks
+import android.content.Context
+import android.telecom.Call
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +17,15 @@ import com.example.criminalintent.data.Crime
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<CrimeViewController.GenericHolder>() {
+class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks) : RecyclerView.Adapter<CrimeViewController.GenericHolder>() {
+    interface Callbacks{
+        fun onCrimeClick(uuid: UUID)
+    }
+
+    var callbacks: Callbacks? = null
+    init {
+        callbacks = callbacksContext
+    }
 
      abstract class GenericHolder(itemView: View):RecyclerView.ViewHolder(itemView){
          val crimeTitle: TextView = itemView.findViewById(R.id.crime_title)
@@ -23,13 +34,15 @@ class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<Crime
 
 
     //main viewholder
-    inner class ViewHolder(itemView: View): GenericHolder(itemView),View.OnClickListener{
+    inner class ViewHolder(itemView: View, thisCallback: Callbacks): GenericHolder(itemView),View.OnClickListener{
+        var callbacks: Callbacks? = null
         val imageSolved: ImageView = itemView.findViewById(R.id.crime_solved_image)
         init {
+            callbacks = thisCallback
             itemView.setOnClickListener(this)
         }
         override fun onClick(p0: View?) {
-            Toast.makeText(p0?.context,crimeTitle.text.toString(),Toast.LENGTH_SHORT).show()
+            callbacks?.onCrimeClick(dataSet[adapterPosition].id)
         }
      }
 
@@ -49,7 +62,7 @@ class CrimeViewController(val dataSet: List<Crime>) : RecyclerView.Adapter<Crime
         parent: ViewGroup,
         viewType: Int
     ): GenericHolder = when(viewType){
-        0 -> ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_crime,parent,false))
+        0 -> ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_crime,parent,false),callbacks!!)
         else ->  ViewHolderSpecial(LayoutInflater.from(parent.context).inflate(R.layout.list_item_crime_special,parent,false))
     }
 
