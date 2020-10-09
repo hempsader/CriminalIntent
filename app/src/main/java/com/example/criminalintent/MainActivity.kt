@@ -2,6 +2,7 @@ package com.example.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import com.example.criminalintent.fragments.CrimeFragment
 import com.example.criminalintent.fragments.CriminalListFragment
 import java.util.*
@@ -31,4 +32,5 @@ class MainActivity : AppCompatActivity(), CriminalListFragment.CrimeCallback {
     companion object{
         const val CRIME_UUID = "crime_uuid"
     }
+
 }

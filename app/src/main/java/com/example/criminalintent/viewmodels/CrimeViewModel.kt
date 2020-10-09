@@ -9,8 +9,7 @@ import java.util.*
 
 class CrimeViewModel : ViewModel(){
     val listOfCrimes = CrimeRepository.get().getCrimes()
-
-    init {
-
+    fun addCrime(crime:Crime){
+        CrimeRepository.get().insertCrime(crime)
     }
 }

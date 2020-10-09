@@ -18,7 +18,7 @@ import com.example.criminalintent.viewmodels.CrimeDetailViewModel
 import kotlinx.android.synthetic.main.fragment_crime.*
 import java.util.*
 private const val REQUEST_DATE = 0
-class CrimeFragment : Fragment(){
+class CrimeFragment : Fragment(), DatePickerDialog.DialogCallback{
     private lateinit var crime: Crime
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDetail: EditText
@@ -72,7 +72,7 @@ class CrimeFragment : Fragment(){
             setOnClickListener {
                 DatePickerDialog.newInstance(crime.date).apply {
                     setTargetFragment(this@CrimeFragment, REQUEST_DATE)
-                    show(parentFragmentManager,"date_dialog")
+                    show(this@CrimeFragment.requireFragmentManager(),"date_dialog")
                 }
             }
         }
@@ -106,5 +106,10 @@ class CrimeFragment : Fragment(){
     override fun onStop() {
         super.onStop()
         CrimeDetailViewModel().saveCrime(crime)
+    }
+
+    override fun onDateSet(date: Date) {
+        crime.date = date
+       dateButton.text = date.toString()
     }
 }

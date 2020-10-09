@@ -6,6 +6,7 @@
     <string name="button_add">Wed Nov 14 11:56 EST 2018</string>
     <string name="solved">Solved</string>
     <string name="police">Police</string>
+    <string name="new_crime">New Crime</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

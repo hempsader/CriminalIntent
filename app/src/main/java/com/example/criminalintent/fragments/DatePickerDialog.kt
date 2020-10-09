@@ -2,9 +2,11 @@ package com.example.criminalintent.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
@@ -20,16 +22,32 @@ class DatePickerDialog : DialogFragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val pickerCall = object: DatePickerDialog.OnDateSetListener{
-            override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        var getHour = 0
+        var getMinute = 0
+        var getYear = 0
+        var getMonth = 0
+        var getDay = 0
+
+        val pickerDate = DatePickerDialog.OnDateSetListener { p0, p1, p2, p3 ->
+            getYear = p1
+            getMonth = p2
+            getDay = p3
+            val pickTime = TimePickerDialog.OnTimeSetListener{ timePicker: TimePicker, i: Int, i1: Int ->
+                getHour = i
+                getMinute = i1
                 targetFragment.let {
-                    (it as DialogCallback)
+                    val calendar = GregorianCalendar(p1,p2,p3,getHour,getMinute)
+                    (it as DialogCallback).onDateSet(calendar.time)
                 }
             }
+            TimePickerDialog(requireContext(),pickTime,hour,minute,true).show()
+
 
         }
-        val datePickerDialog = DatePickerDialog(requireContext(),pickerCall,year,month,day)
-
+        val datePickerDialog = DatePickerDialog(requireContext(),pickerDate,year,month,day)
         return datePickerDialog
     }
 
