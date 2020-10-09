@@ -11,17 +11,18 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.R
 import com.example.criminalintent.data.Crime
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks) : RecyclerView.Adapter<CrimeViewController.GenericHolder>() {
+class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks) : ListAdapter<Crime, CrimeViewController.GenericHolder>(DiffUtil()) {
     interface Callbacks{
         fun onCrimeClick(uuid: UUID)
     }
-
     var callbacks: Callbacks? = null
     init {
         callbacks = callbacksContext
@@ -31,8 +32,6 @@ class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks)
          val crimeTitle: TextView = itemView.findViewById(R.id.crime_title)
          val crimeDate: TextView = itemView.findViewById(R.id.crime_date)
      }
-
-
     //main viewholder
     inner class ViewHolder(itemView: View, thisCallback: Callbacks): GenericHolder(itemView),View.OnClickListener{
         var callbacks: Callbacks? = null
@@ -99,8 +98,15 @@ class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks)
             }
         }
     }
+}
 
+private class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Crime>(){
+    override fun areItemsTheSame(oldItem: Crime, newItem: Crime): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-
+    override fun areContentsTheSame(oldItem: Crime, newItem: Crime): Boolean {
+        return oldItem.equals(newItem)
+    }
 
 }

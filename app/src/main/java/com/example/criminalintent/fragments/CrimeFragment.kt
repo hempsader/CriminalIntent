@@ -3,6 +3,7 @@ package com.example.criminalintent.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import com.example.criminalintent.repository.CrimeRepository
 import com.example.criminalintent.viewmodels.CrimeDetailViewModel
 import kotlinx.android.synthetic.main.fragment_crime.*
 import java.util.*
-
+private const val REQUEST_DATE = 0
 class CrimeFragment : Fragment(){
     private lateinit var crime: Crime
     private lateinit var editTextTitle: EditText
@@ -45,15 +46,6 @@ class CrimeFragment : Fragment(){
             crimeUUID = it.getString(MainActivity.CRIME_UUID)
         }
         crime = Crime()
-        titleWatcher = object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                crime.title = p0.toString()
-            }
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        }
         crimeDetailViewModel.loadCrime(UUID.fromString(crimeUUID))
     }
 
@@ -69,15 +61,20 @@ class CrimeFragment : Fragment(){
         editTextDetail = view.findViewById(R.id.editText_detail)
         checkboxSolved = view.findViewById(R.id.checkBox_solved)
         dateButton = view.findViewById(R.id.button_add)
-        editTextTitle.addTextChangedListener(titleWatcher)
         titleText = view.findViewById(R.id.textView_title)
         crimeDetailViewModel.crimeLiveData.observe(viewLifecycleOwner, {
             crimeUI(it)
+            crime = it
+            editTextTitle.addTextChangedListener(addWatcher(crime))
         })
-
         dateButton.apply {
             text = crime.date.toString()
-            isEnabled = false
+            setOnClickListener {
+                DatePickerDialog.newInstance(crime.date).apply {
+                    setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+                    show(parentFragmentManager,"date_dialog")
+                }
+            }
         }
         return view
     }
@@ -90,12 +87,24 @@ class CrimeFragment : Fragment(){
     }
     private fun crimeUI(crime: Crime){
         titleText.text = crime.title
-        button_add.text = crime.date.toString()
+        dateButton.text = crime.date.toString()
         checkboxSolved.isChecked = crime.solved
     }
 
+    fun addWatcher(crime: Crime): TextWatcher{
+        return object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun afterTextChanged(p0: Editable?) {
+                crime.title = p0.toString()
+            }
+        }
+    }
 
-
-
-
+    override fun onStop() {
+        super.onStop()
+        CrimeDetailViewModel().saveCrime(crime)
+    }
 }

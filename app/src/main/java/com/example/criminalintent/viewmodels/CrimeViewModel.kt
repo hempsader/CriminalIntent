@@ -11,8 +11,6 @@ class CrimeViewModel : ViewModel(){
     val listOfCrimes = CrimeRepository.get().getCrimes()
 
     init {
-        GlobalScope.launch() {
-            CrimeRepository.get().insertCrime(Crime("Test xxx"))
-        }
+
     }
 }
