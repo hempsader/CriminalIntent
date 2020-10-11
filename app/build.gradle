@@ -6,9 +6,17 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
     defaultConfig {
         applicationId "com.example.criminalintent"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -23,6 +31,7 @@ android {
         }
     }
 }
+
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

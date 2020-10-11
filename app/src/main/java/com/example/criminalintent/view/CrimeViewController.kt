@@ -31,6 +31,7 @@ class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks)
      abstract class GenericHolder(itemView: View):RecyclerView.ViewHolder(itemView){
          val crimeTitle: TextView = itemView.findViewById(R.id.crime_title)
          val crimeDate: TextView = itemView.findViewById(R.id.crime_date)
+
      }
     //main viewholder
     inner class ViewHolder(itemView: View, thisCallback: Callbacks): GenericHolder(itemView),View.OnClickListener{
@@ -100,13 +101,13 @@ class CrimeViewController(val dataSet: List<Crime>, callbacksContext: Callbacks)
     }
 }
 
-private class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Crime>(){
+private class DiffUtil : DiffUtil.ItemCallback<Crime>(){
     override fun areItemsTheSame(oldItem: Crime, newItem: Crime): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Crime, newItem: Crime): Boolean {
-        return oldItem.equals(newItem)
+        return oldItem == newItem
     }
 
 }

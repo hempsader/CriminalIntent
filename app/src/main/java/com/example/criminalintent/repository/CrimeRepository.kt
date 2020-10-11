@@ -12,6 +12,7 @@ import java.util.concurrent.Executors
 class CrimeRepository private constructor(context: Context){
     private val executor = Executors.newSingleThreadExecutor()
     private val database = Room.databaseBuilder(context.applicationContext,CrimeDatabase::class.java,"crimes_table")
+        .fallbackToDestructiveMigration()
         .build()
 
     private val crimeDao = database.crimeDao()
