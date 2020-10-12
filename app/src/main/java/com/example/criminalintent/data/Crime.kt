@@ -6,4 +6,7 @@ import java.util.*
 
 @Entity(tableName = "crimes_table")
 data class Crime(var title: String = "", @PrimaryKey val id: UUID = UUID.randomUUID(), var date: Date = Date(), val solved: Boolean = false,
-                 var suspect: String = "", var phone: String = "")
+                 var suspect: String = "", var phone: String = ""){
+    val photoFileName
+        get() = "IMG_$id.jpg"
+}

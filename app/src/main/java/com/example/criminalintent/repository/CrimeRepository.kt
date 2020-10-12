@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.criminalintent.data.Crime
 import com.example.criminalintent.database.CrimeDatabase
+import java.io.File
 import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.Executor
@@ -14,7 +15,7 @@ class CrimeRepository private constructor(context: Context){
     private val database = Room.databaseBuilder(context.applicationContext,CrimeDatabase::class.java,"crimes_table")
         .fallbackToDestructiveMigration()
         .build()
-
+    private val fileDir = context.applicationContext.filesDir
     private val crimeDao = database.crimeDao()
 
     fun getCrimes() = crimeDao.getCrimes()
@@ -29,6 +30,8 @@ class CrimeRepository private constructor(context: Context){
             crimeDao.updateCrime(crime)
         }
     }
+
+    fun getPhotoFile(crime: Crime): File = File(fileDir,crime.photoFileName)
 
 
     companion object{
