@@ -72,6 +72,7 @@ class CrimeFragment : Fragment(), DatePickerDialog.DialogCallback{
             }
             crime = Crime()
             crimeDetailViewModel.loadCrime(UUID.fromString(crimeUUID))
+
         }
 
 
@@ -81,7 +82,16 @@ class CrimeFragment : Fragment(), DatePickerDialog.DialogCallback{
             savedInstanceState: Bundle?
         ): View? {
             val view = inflater.inflate(R.layout.fragment_crime,container,false)
-
+            crimeDetailViewModel.crimeLiveData.observe(viewLifecycleOwner, {
+                crime?.let {
+                    this.crime = crime
+                    photoFile = crimeDetailViewModel.getPhotoFile(crime)
+                    photoURI = FileProvider.getUriForFile(requireActivity(),"com.example.criminalintent.fileprovider",
+                        photoFile
+                    )
+                    crimeUI(crime)
+                }
+            })
             editTextTitle = view.findViewById(R.id.editText_title)
             editTextDetail = view.findViewById(R.id.editText_detail)
             checkboxSolved = view.findViewById(R.id.checkBox_solved)
@@ -106,20 +116,12 @@ class CrimeFragment : Fragment(), DatePickerDialog.DialogCallback{
                     }
                 }
             }
+
             return view
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        crimeDetailViewModel.crimeLiveData.observe(viewLifecycleOwner, {
-            crime?.let {
-                this.crime = crime
-                photoFile = crimeDetailViewModel.getPhotoFile(crime)
-                photoURI = FileProvider.getUriForFile(requireActivity(),"com.example.criminalintent.fileprovider",
-                    photoFile
-                )
-                crimeUI(crime)
-            }
-        })
+
     }
 
         override fun onStart() {
